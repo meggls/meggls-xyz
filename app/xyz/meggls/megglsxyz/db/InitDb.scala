@@ -28,14 +28,7 @@ object InitDb {
 
     object DbCalls {
 
-        private val EMPLOYMENT_SCHEMA  = "e2719138ocykwebz"
-        private val SCHEMA_LIST = List(
-            EMPLOYMENT_SCHEMA
-        )
-
-        private val TABLE_EMPLOYMENT_EXPERIENCE = s"EmploymentExperience"
-        private val TABLE_EMPLOYMENT_POSITION = s"EmploymentPosition"
-        private val TABLE_EMPLOYMENT_DUTY = s"EmploymentDuty"
+        import SchemaDefinition._
 
         private def dropIfExists(tableName: String)(implicit c: Connection): Boolean = {
             //ONLY USE INTERNALLY!! OPEN TO SQL INJECTION WITH STRING INTERPOLATION
