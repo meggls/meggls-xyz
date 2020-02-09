@@ -1,8 +1,8 @@
-name := "template-project"
+name := "meggls-xyz"
 
 version := "1.0.1"
 
-lazy val `template-project` = (project in file("."))
+lazy val `meggls-xyz` = (project in file("."))
   .enablePlugins(PlayScala, SwaggerPlugin)
 
 libraryDependencies ++= Seq(
@@ -30,6 +30,6 @@ resolvers ++= Seq(
     "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
 )
 
-swaggerDomainNameSpaces := Seq("xyz.meggls.template")
+swaggerDomainNameSpaces := Seq("xyz.meggls")
 
 routesGenerator := InjectedRoutesGenerator

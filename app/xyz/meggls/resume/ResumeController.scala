@@ -2,7 +2,7 @@ package xyz.meggls.template
 
 import play.api.mvc.{AbstractController, ControllerComponents}
 
-class TemplateController(cc: ControllerComponents, templateManager: TemplateManager)
+class ResumeController(cc: ControllerComponents, templateManager: ResumeManager)
   extends AbstractController(cc) {
 
 }
