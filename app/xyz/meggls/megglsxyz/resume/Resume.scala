@@ -1,19 +1,16 @@
-package xyz.meggls.megglsxyz.resume.models
+package xyz.meggls.megglsxyz.resume
+
+import play.api.libs.json.{Json, OFormat}
+import xyz.meggls.megglsxyz.contactInfo.ContactInfo
+import xyz.meggls.megglsxyz.education.Education
+import xyz.meggls.megglsxyz.employment.EmploymentExperience
 
 case class Resume(
-                 contactInfo: ContactInfo,
-                 experiences: List[Experience],
-                 educations: List[Education]
+                   contactInfo: ContactInfo,
+                   employment: List[EmploymentExperience],
+                   education: List[Education]
                  )
 
-case class ContactInfo (
-                         name: String,
-                         address: Address,
-                         phone: String,
-                         email: String,
-                       )
-
-case class Address (
-                   line1: String,
-                   line2: String
-                   )
+object Resume {
+    implicit val format: OFormat[Resume] = Json.format[Resume]
+}

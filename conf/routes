@@ -6,3 +6,85 @@ GET   /assets/*file                 controllers.Assets.versioned(path="/public",
 
 ### NoDocs ###
 GET   /swagger                      controllers.Default.redirect(to = "/docs/swagger-ui/index.html?url=../../assets/swagger.json")
+
+### NoDocs ###
+GET     /                           controllers.Default.redirect(to = "/docs/swagger-ui/index.html?url=../../assets/swagger.json")
+
+###
+# summary: View entire Resume
+# tags:
+#   - Resume
+# responses:
+#  200:
+#    description: Success
+#    schema:
+#      $ref: '#/definitions/xyz.meggls.megglsxyz.resume.Resume'
+###
+GET     /resume                     xyz.meggls.megglsxyz.resume.ResumeController.getResume
+
+###
+# summary: View entire Employment section of Resume
+# tags:
+#   - Resume
+# responses:
+#  200:
+#    description: Success
+#    type: array
+#    items:
+#      $ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentExperience'
+###
+GET     /resume/employment          xyz.meggls.megglsxyz.resume.ResumeController.getAllEmployment
+
+###
+# summary: View specific Employment experience of Resume
+# tags:
+#   - Resume
+# parameters:
+#   - name: experienceId
+#     in: path
+#     description: ID of the Employment Experience
+#     type: integer
+# responses:
+#  200:
+#    description: Success
+#    type: object
+#    schema:
+#      $ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentExperience'
+###
+GET     /resume/employment/experience/:experienceId xyz.meggls.megglsxyz.resume.ResumeController.getEmploymentExperience(experienceId: Long)
+
+###
+# summary: View specific Employment experience of Resume
+# tags:
+#   - Resume
+# parameters:
+#   - name: positionId
+#     in: path
+#     description: ID of the Employment Position
+#     type: integer
+# responses:
+#  200:
+#    description: Success
+#    type: object
+#    schema:
+#      $ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentPosition'
+###
+GET     /resume/employment/position/:positionId   xyz.meggls.megglsxyz.resume.ResumeController.getEmploymentPosition(positionId: Long)
+
+###
+# summary: View specific Employment experience of Resume
+# tags:
+#   - Resume
+# parameters:
+#   - name: dutyId
+#     in: path
+#     description: ID of the Employment Duty
+#     type: integer
+# responses:
+#  200:
+#    description: Success
+#    type: object
+#    schema:
+#      $ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentDuty'
+###
+GET     /resume/employment/duty/:dutyId   xyz.meggls.megglsxyz.resume.ResumeController.getEmploymentPosition(dutyId: Long)

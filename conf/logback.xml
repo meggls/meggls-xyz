@@ -14,7 +14,7 @@
 
     <logger name="play" level="INFO" />
     <logger name="application" level="DEBUG" />
-    <logger name="xyz.meggls" level="INFO" />
+    <logger name="xyz.meggls" level="TRACE" />
 
     <root level="WARN">
         <appender-ref ref="ASYNCSTDOUT" />

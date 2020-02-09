@@ -13,6 +13,16 @@ case class EmploymentExperience(
 
 object EmploymentExperience {
     implicit val jsonFormat: OFormat[EmploymentExperience] = Json.format[EmploymentExperience]
+
+    def fromDb(positions: List[EmploymentPosition])(expDb: ExperienceDb): EmploymentExperience = {
+        EmploymentExperience(
+            expDb.id,
+            expDb.company,
+            expDb.startDate,
+            expDb.endDate,
+            positions
+        )
+    }
 }
 
 case class ExperienceDb (
@@ -23,7 +33,7 @@ case class ExperienceDb (
                         )
 
 object ExperienceDb {
-    implicit val sqlFormat: RowParser[ExperienceDb] = Macro.namedParser[ExperienceDb]
+    val sqlFormat: RowParser[ExperienceDb] = Macro.namedParser[ExperienceDb]
 }
 
 case class EmploymentPosition(
@@ -36,6 +46,16 @@ case class EmploymentPosition(
 
 object EmploymentPosition {
     implicit val jsonFormat: OFormat[EmploymentPosition] = Json.format[EmploymentPosition]
+
+    def fromDb(duties: List[EmploymentDuty])(posDb: PositionDb): EmploymentPosition = {
+        EmploymentPosition(
+            posDb.id,
+            posDb.title,
+            posDb.startDate,
+            posDb.endDate,
+            duties
+        )
+    }
 }
 
 case class PositionDb (
@@ -58,6 +78,14 @@ case class EmploymentDuty(
 
 object EmploymentDuty {
     implicit val format: OFormat[EmploymentDuty] = Json.format[EmploymentDuty]
+
+    def fromDb(dutyDb: DutyDb): EmploymentDuty = {
+        EmploymentDuty(
+            dutyDb.id,
+            dutyDb.description,
+            dutyDb.priority
+        )
+    }
 }
 
 case class DutyDb (

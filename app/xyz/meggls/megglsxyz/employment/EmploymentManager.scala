@@ -4,39 +4,149 @@ import java.sql.Connection
 
 import akka.Done
 import anorm.{NamedParameter, SQL}
+import javax.inject.Inject
+import play.api.db.Database
 
 import scala.concurrent.Future
-import xyz.meggls.megglsxyz.db.SchemaDefinition
+import scala.concurrent.ExecutionContext.Implicits.global
+import xyz.meggls.megglsxyz.db.{DbExecutionContext, SchemaDefinition}
 
-class EmploymentManager {
+class EmploymentManager @Inject()(db: Database) {
 
     import EmploymentManager._
 
-    def getAllEmployment: Future[List[EmploymentExperience]] = ???
+    def getAllEmployment: Future[List[EmploymentExperience]] = {
+        val dbResults = Future { db.withConnection { implicit c =>
+            val experiences = DbCalls.selectAllEmploymentExperience
+            val positions = DbCalls.selectAllEmploymentPosition
+            val duties = DbCalls.selectAllEmploymentDuty
+            (experiences, positions, duties)
+        }}(DbExecutionContext.ctx)
+        for {
+            (experiences, positions, duties) <- dbResults
+            expPositions = positions.groupBy(_.experienceId)
+            posDuties = duties.groupBy(_.positionId).mapValues(_.map(EmploymentDuty.fromDb))
+            positionsResult = expPositions.mapValues(_.map { position =>
+                val duties = posDuties.getOrElse(position.id, List.empty)
+                EmploymentPosition.fromDb(duties)(position)
+            })
+            result = experiences.map { experience =>
+                val positions = positionsResult.getOrElse(experience.id, List.empty)
+                EmploymentExperience.fromDb(positions)(experience)
+            }
+        } yield  result
+    }
 
-    def getEmploymentExperience(id: Int): Future[EmploymentExperience] = ???
+    def getEmploymentExperience(experienceId: Long): Future[Option[EmploymentExperience]] = {
+        val dbResults = Future { db.withConnection { implicit c =>
+            val experience = DbCalls.selectEmploymentExperience(experienceId)
+            val positionDuties = if (experience.isDefined)
+                DbCalls.selectEmploymentPositionByExperience(experienceId).map { posDb =>
+                    val dutiesDb = DbCalls.selectEmploymentDutyByPosition(posDb.id)
+                    (posDb, dutiesDb)
+                }
+            else
+                List.empty
+            (experience, positionDuties)
+        }}(DbExecutionContext.ctx)
+        for {
+            (experience, positionDuties) <- dbResults
+            positions = positionDuties.map { case (posDb, dutiesDb) =>
+                val duties = dutiesDb.map(EmploymentDuty.fromDb)
+                EmploymentPosition.fromDb(duties)(posDb)
+            }
+        } yield experience.map(EmploymentExperience.fromDb(positions))
+    }
 
-    def getEmploymentPosition(positionId: Int): Future[EmploymentPosition] = ???
+    def getEmploymentPosition(positionId: Long): Future[Option[EmploymentPosition]] = {
+        val dbResult = Future { db.withConnection { implicit c =>
+            val position = DbCalls.selectEmploymentPosition(positionId)
+            val duties = if (position.isDefined) DbCalls.selectEmploymentDutyByPosition(positionId) else List.empty
+            (position, duties)
+        }}(DbExecutionContext.ctx)
+        for {
+            (positionResult, dutiesResult) <- dbResult
+            duties = dutiesResult.map(EmploymentDuty.fromDb)
+        } yield positionResult.map(EmploymentPosition.fromDb(duties))
+    }
 
-    def getEmploymentDuty(dutyId: Int): Future[EmploymentDuty] = ???
+    def getEmploymentDuty(dutyId: Long): Future[Option[EmploymentDuty]] = {
+        val dbResult = Future { db.withConnection { implicit c =>
+            DbCalls.selectEmploymentDuty(dutyId)
+        }}(DbExecutionContext.ctx)
+        dbResult.map(_.map(EmploymentDuty.fromDb))
+    }
 
-    def addEmploymentExperience(empExp: EmploymentExperience): Future[Int] = ???
+    def addEmploymentExperience(empExp: EmploymentExperience): Future[Option[Long]] = {
+        Future { db.withConnection { implicit c =>
+            val experienceInsert = DbCalls.insertEmploymentExperience(empExp)
+            experienceInsert.map { experienceId =>
+                empExp.positions.map { empPos =>
+                    val positionInsert = DbCalls.insertEmploymentPosition(experienceId, empPos)
+                    positionInsert.map { positionId =>
+                        empPos.duties.map { empDuty =>
+                            DbCalls.insertEmploymentDuty(positionId, empDuty)
+                        }
+                    }
+                }
+            }
+            experienceInsert
+        }}(DbExecutionContext.ctx)
+    }
 
-    def addEmploymentPosition(experienceId: Int, empPos: EmploymentPosition): Future[Int] = ???
+    def addEmploymentPosition(experienceId: Long, empPos: EmploymentPosition): Future[Option[Long]] = {
+        Future { db.withConnection { implicit c =>
+            val positionInsert = DbCalls.insertEmploymentPosition(experienceId, empPos)
+            positionInsert.map { positionId =>
+                empPos.duties.map { empDuty =>
+                    DbCalls.insertEmploymentDuty(positionId, empDuty)
+                }
+            }
+            positionInsert
+        }}(DbExecutionContext.ctx)
+    }
 
-    def addEmploymentDuty(experienceId: Int, positionId: Int, duty: EmploymentDuty): Future[Int] = ???
+    def addEmploymentDuty(positionId: Long, empDuty: EmploymentDuty): Future[Option[Long]] = {
+        Future { db.withConnection { implicit c =>
+            DbCalls.insertEmploymentDuty(positionId, empDuty)
+        }}(DbExecutionContext.ctx)
+    }
 
-    def updateEmploymentExperience(experienceId: Int, newExp: EmploymentExperience): Future[Done] = ???
+    def updateEmploymentExperience(experienceId: Long, newExp: EmploymentExperience): Future[Int] = {
+        Future { db.withConnection { implicit c =>
+            ???
+        }}(DbExecutionContext.ctx)
+    }
 
-    def updateEmploymentPosition(positionId: Int, newPos: EmploymentPosition): Future[Int] = ???
+    def updateEmploymentPosition(positionId: Long, newPos: EmploymentPosition): Future[Int] = {
+        Future { db.withConnection { implicit c =>
+            ???
+        }}(DbExecutionContext.ctx)
+    }
 
-    def updateEmploymentDuty(dutyId: Int, newDuty: EmploymentDuty): Future[Int] = ???
+    def updateEmploymentDuty(dutyId: Long, newDuty: EmploymentDuty): Future[Int] = {
+        Future { db.withConnection { implicit c =>
+            ???
+        }}(DbExecutionContext.ctx)
+    }
 
-    def deleteEmploymentExperience(experienceId: Int): Future[Done] = ???
+    def deleteEmploymentExperience(experienceId: Long): Future[Done] = {
+        Future { db.withConnection { implicit c =>
+            ???
+        }}(DbExecutionContext.ctx)
+    }
 
-    def deleteEmploymentPosition(positionId: Int): Future[Int] = ???
+    def deleteEmploymentPosition(positionId: Long): Future[Int] = {
+        Future { db.withConnection { implicit c =>
+            ???
+        }}(DbExecutionContext.ctx)
+    }
 
-    def deleteEmploymentDuty(dutyId: Int): Future[Int] = ???
+    def deleteEmploymentDuty(dutyId: Long): Future[Int] = {
+        Future { db.withConnection { implicit c =>
+            ???
+        }}(DbExecutionContext.ctx)
+    }
 
 }
 
@@ -45,6 +155,88 @@ object EmploymentManager {
     object DbCalls {
 
         import SchemaDefinition._
+
+        def selectAllEmploymentExperience(implicit c: Connection): List[ExperienceDb] = {
+            val sql =
+                s"""
+                   |SELECT *
+                   |FROM $TABLE_EMPLOYMENT_EXPERIENCE
+                 """.stripMargin
+            SQL(sql).as(ExperienceDb.sqlFormat.*)
+        }
+
+        def selectEmploymentExperience(experienceId: Long)(implicit c: Connection): Option[ExperienceDb] = {
+            val sql =
+                s"""
+                   |SELECT *
+                   |FROM $TABLE_EMPLOYMENT_EXPERIENCE
+                   |WHERE id = {experienceId}
+                 """.stripMargin
+            val params: List[NamedParameter] = List("experienceId" -> experienceId)
+            SQL(sql).on(params:_*).as(ExperienceDb.sqlFormat.singleOpt)
+        }
+
+        def selectAllEmploymentPosition(implicit c: Connection): List[PositionDb] = {
+            val sql =
+                s"""
+                   |SELECT *
+                   |FROM $TABLE_EMPLOYMENT_POSITION
+                 """.stripMargin
+            SQL(sql).as(PositionDb.sqlFormat.*)
+        }
+
+        def selectEmploymentPositionByExperience(experienceId: Long)(implicit c: Connection): List[PositionDb] = {
+            val sql =
+                s"""
+                   |SELECT *
+                   |FROM $TABLE_EMPLOYMENT_POSITION
+                   |WHERE experienceId = {experienceId}
+                 """.stripMargin
+            val params: List[NamedParameter] = List("experienceId" -> experienceId)
+            SQL(sql).on(params:_*).as(PositionDb.sqlFormat.*)
+        }
+
+        def selectEmploymentPosition(positionId: Long)(implicit c: Connection): Option[PositionDb] = {
+            val sql =
+                s"""
+                   |SELECT *
+                   |FROM $TABLE_EMPLOYMENT_POSITION
+                   |WHERE id = {positionId}
+                 """.stripMargin
+            val params: List[NamedParameter] = List("positionId" -> positionId)
+            SQL(sql).on(params:_*).as(PositionDb.sqlFormat.singleOpt)
+        }
+
+        def selectAllEmploymentDuty(implicit c: Connection): List[DutyDb] = {
+            val sql =
+                s"""
+                   |SELECT *
+                   |FROM $TABLE_EMPLOYMENT_DUTY
+                 """.stripMargin
+            SQL(sql).as(DutyDb.sqlFormat.*)
+        }
+
+        def selectEmploymentDutyByPosition(positionId: Long)(implicit c: Connection): List[DutyDb] = {
+            val sql =
+                s"""
+                   |SELECT *
+                   |FROM $TABLE_EMPLOYMENT_DUTY
+                   |WHERE positionId = {positionId}
+                 """.stripMargin
+            val params: List[NamedParameter] = List("positionId" -> positionId)
+            SQL(sql).on(params:_*).as(DutyDb.sqlFormat.*)
+        }
+
+        def selectEmploymentDuty(dutyId: Long)(implicit c: Connection): Option[DutyDb] = {
+            val sql =
+                s"""
+                   |SELECT *
+                   |FROM $TABLE_EMPLOYMENT_DUTY
+                   |WHERE id = {dutyId}
+                 """.stripMargin
+            val params: List[NamedParameter] = List("dutyId" -> dutyId)
+            SQL(sql).on(params:_*).as(DutyDb.sqlFormat.singleOpt)
+        }
 
         def insertEmploymentExperience(exp: EmploymentExperience)(implicit c: Connection): Option[Long] = {
             val sql =

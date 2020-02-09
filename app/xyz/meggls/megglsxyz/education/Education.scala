@@ -1,13 +1,26 @@
-package xyz.meggls.megglsxyz.resume.models
+package xyz.meggls.megglsxyz.education
 
-case class Education (
-                     schoolName: String,
-                     endDate: Int,
-                     programs: List[Program]
-                     )
+import play.api.libs.json.{Json, OFormat}
 
-case class Program (
-                   programName: String,
-                   focus: String,
-                   secondary: List[String]
-                   )
+case class Education(
+                      id: Int = 0,
+                      schoolName: String,
+                      endDate: Int,
+                      programs: List[EducationProgram]
+                    )
+
+object Education {
+    implicit val format: OFormat[Education] = Json.format[Education]
+}
+
+case class EducationProgram(
+                    id: Int = 0,
+                    programName: String,
+                    priority: Int = 1,
+                    focus: String,
+                    secondary: List[String]
+                  )
+
+object EducationProgram {
+    implicit val format: OFormat[EducationProgram] = Json.format[EducationProgram]
+}
