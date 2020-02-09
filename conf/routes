@@ -11,7 +11,7 @@ GET   /swagger                      controllers.Default.redirect(to = "/docs/swa
 GET     /                           controllers.Default.redirect(to = "/docs/swagger-ui/index.html?url=../../assets/swagger.json")
 
 ###
-# summary: Reset the Resume to original values
+# summary: Reset the Resume to Megan Juell's original values
 # tags:
 #   - Resume
 # responses:
