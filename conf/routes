@@ -11,6 +11,16 @@ GET   /swagger                      controllers.Default.redirect(to = "/docs/swa
 GET     /                           controllers.Default.redirect(to = "/docs/swagger-ui/index.html?url=../../assets/swagger.json")
 
 ###
+# summary: Reset the Resume to original values
+# tags:
+#   - Resume
+# responses:
+#  200:
+#    description: Success
+###
+POST    /resetResume                xyz.meggls.megglsxyz.resume.ResumeController.resetResume
+
+###
 # summary: View entire Resume
 # tags:
 #   - Resume
@@ -23,7 +33,7 @@ GET     /                           controllers.Default.redirect(to = "/docs/swa
 GET     /resume                     xyz.meggls.megglsxyz.resume.ResumeController.getResume
 
 ###
-# summary: View entire Employment section of Resume
+# summary: View all Employments of Resume
 # tags:
 #   - Resume
 # responses:
@@ -36,7 +46,7 @@ GET     /resume                     xyz.meggls.megglsxyz.resume.ResumeController
 GET     /resume/employment          xyz.meggls.megglsxyz.resume.ResumeController.getAllEmployment
 
 ###
-# summary: View specific Employment experience of Resume
+# summary: View specific Employment details of an Emplopyment
 # tags:
 #   - Resume
 # parameters:
@@ -51,13 +61,35 @@ GET     /resume/employment          xyz.meggls.megglsxyz.resume.ResumeController
 #    schema:
 #      $ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentExperience'
 ###
-GET     /resume/employment/experience/:experienceId xyz.meggls.megglsxyz.resume.ResumeController.getEmploymentExperience(experienceId: Long)
+GET     /resume/employment/:employmentId xyz.meggls.megglsxyz.resume.ResumeController.getEmployment(employmentId: Long)
 
 ###
-# summary: View specific Employment experience of Resume
+# summary: View all Positions of an Employment
 # tags:
 #   - Resume
 # parameters:
+#   - name: experienceId
+#     in: path
+#     description: ID of the Employment Experience
+#     type: integer
+# responses:
+#  200:
+#    description: Success
+#    type: array
+#    items:
+#      $ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentPosition'
+###
+GET     /resume/employment/:employmentId/position   xyz.meggls.megglsxyz.resume.ResumeController.getEmploymentPositions(employmentId: Long)
+
+###
+# summary: View specific Position details of an Employment
+# tags:
+#   - Resume
+# parameters:
+#   - name: experienceId
+#     in: path
+#     description: ID of the Employment Experience
+#     type: integer
 #   - name: positionId
 #     in: path
 #     description: ID of the Employment Position
@@ -69,13 +101,43 @@ GET     /resume/employment/experience/:experienceId xyz.meggls.megglsxyz.resume.
 #    schema:
 #      $ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentPosition'
 ###
-GET     /resume/employment/position/:positionId   xyz.meggls.megglsxyz.resume.ResumeController.getEmploymentPosition(positionId: Long)
+GET     /resume/employment/:employmentId/position/:positionId   xyz.meggls.megglsxyz.resume.ResumeController.getEmploymentPosition(employmentId: Long, positionId: Long)
 
 ###
-# summary: View specific Employment experience of Resume
+# summary: View all Duties of a Position
 # tags:
 #   - Resume
 # parameters:
+#   - name: experienceId
+#     in: path
+#     description: ID of the Employment Experience
+#     type: integer
+#   - name: positionId
+#     in: path
+#     description: ID of the Employment Position
+#     type: integer
+# responses:
+#  200:
+#    description: Success
+#    type: array
+#    items:
+#      $ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentDuty'
+###
+GET     /resume/employment/:employmentId/position/:positionId/duty   xyz.meggls.megglsxyz.resume.ResumeController.getEmploymentPositionDuties(employmentId: Long, positionId: Long)
+
+###
+# summary: View specific Duty details of a Position
+# tags:
+#   - Resume
+# parameters:
+#   - name: experienceId
+#     in: path
+#     description: ID of the Employment Experience
+#     type: integer
+#   - name: positionId
+#     in: path
+#     description: ID of the Employment Position
+#     type: integer
 #   - name: dutyId
 #     in: path
 #     description: ID of the Employment Duty
@@ -87,4 +149,4 @@ GET     /resume/employment/position/:positionId   xyz.meggls.megglsxyz.resume.Re
 #    schema:
 #      $ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentDuty'
 ###
-GET     /resume/employment/duty/:dutyId   xyz.meggls.megglsxyz.resume.ResumeController.getEmploymentPosition(dutyId: Long)
+GET     /resume/employment/:employmentId/position/:positionId/duty/:dutyId   xyz.meggls.megglsxyz.resume.ResumeController.getEmploymentPositionDuty(employmentId: Long, positionId: Long, dutyId: Long)

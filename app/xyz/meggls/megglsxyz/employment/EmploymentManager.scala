@@ -58,7 +58,12 @@ class EmploymentManager @Inject()(db: Database) {
         } yield experience.map(EmploymentExperience.fromDb(positions))
     }
 
-    def getEmploymentPosition(positionId: Long): Future[Option[EmploymentPosition]] = {
+    def getEmploymentPositions(experienceId: Long): Future[List[EmploymentPosition]] = {
+        ???
+    }
+
+    def getEmploymentPosition(experienceId: Long, positionId: Long): Future[Option[EmploymentPosition]] = {
+        //TODO: validate that position is within experience
         val dbResult = Future { db.withConnection { implicit c =>
             val position = DbCalls.selectEmploymentPosition(positionId)
             val duties = if (position.isDefined) DbCalls.selectEmploymentDutyByPosition(positionId) else List.empty
@@ -70,7 +75,12 @@ class EmploymentManager @Inject()(db: Database) {
         } yield positionResult.map(EmploymentPosition.fromDb(duties))
     }
 
-    def getEmploymentDuty(dutyId: Long): Future[Option[EmploymentDuty]] = {
+    def getEmploymentPositionDuties(experienceId: Long, positionId: Long): Future[List[EmploymentDuty]] = {
+        ???
+    }
+
+    def getEmploymentPositionDuty(experienceId: Long, positionId: Long, dutyId: Long): Future[Option[EmploymentDuty]] = {
+        //TODO: validate that position is within experience
         val dbResult = Future { db.withConnection { implicit c =>
             DbCalls.selectEmploymentDuty(dutyId)
         }}(DbExecutionContext.ctx)
