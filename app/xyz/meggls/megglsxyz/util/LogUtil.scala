@@ -1,5 +1,9 @@
 package xyz.meggls.megglsxyz.util
 
-class LogUtil {
+import com.typesafe.scalalogging.Logger
+
+trait LogUtil {
+
+    implicit protected val log: Logger = Logger(this.getClass)
 
 }
