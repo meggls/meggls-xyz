@@ -299,7 +299,7 @@ GET     /resume/employment/:employmentId/position/:positionId/duty/:dutyId   xyz
 #  200:
 #    description: Success
 ###
-PUT     /resume/employment/:employmentId/position/:positionId/duty/:dutyId   xyz.meggls.megglsxyz.resume.ResumeController.getEmploymentPositionDuty(employmentId: Long, positionId: Long, dutyId: Long)
+PUT     /resume/employment/:employmentId/position/:positionId/duty/:dutyId   xyz.meggls.megglsxyz.resume.ResumeController.updateEmploymentPositionDuty(employmentId: Long, positionId: Long, dutyId: Long)
 
 ###
 # summary: Delete a Duty
@@ -322,7 +322,7 @@ PUT     /resume/employment/:employmentId/position/:positionId/duty/:dutyId   xyz
 #  200:
 #    description: Success
 ###
-DELETE     /resume/employment/:employmentId/position/:positionId/duty/:dutyId   xyz.meggls.megglsxyz.resume.ResumeController.getEmploymentPositionDuty(employmentId: Long, positionId: Long, dutyId: Long)
+DELETE     /resume/employment/:employmentId/position/:positionId/duty/:dutyId   xyz.meggls.megglsxyz.resume.ResumeController.deleteEmploymentPositionDuty(employmentId: Long, positionId: Long, dutyId: Long)
 
 ###
 # summary: Add a new Duty to a Position
