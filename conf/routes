@@ -53,7 +53,7 @@ GET     /resume/contact             xyz.meggls.megglsxyz.resume.ResumeController
 #    description: Success
 #    type: array
 #    items:
-#      $ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentExperience'
+#      $ref: '#/definitions/xyz.meggls.megglsxyz.employment.Employment'
 ###
 GET     /resume/employment          xyz.meggls.megglsxyz.resume.ResumeController.getAllEmployment
 
@@ -71,7 +71,7 @@ GET     /resume/employment          xyz.meggls.megglsxyz.resume.ResumeController
 #    description: Success
 #    type: object
 #    schema:
-#      $ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentExperience'
+#      $ref: '#/definitions/xyz.meggls.megglsxyz.employment.Employment'
 ###
 GET     /resume/employment/:employmentId xyz.meggls.megglsxyz.resume.ResumeController.getEmployment(employmentId: Long)
 
@@ -88,7 +88,7 @@ GET     /resume/employment/:employmentId xyz.meggls.megglsxyz.resume.ResumeContr
 #     name: updatedEmployment
 #     description: Updated values for Employment
 #     schema:
-#       $ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentExperience'
+#       $ref: '#/definitions/xyz.meggls.megglsxyz.employment.Employment'
 # responses:
 #  200:
 #    description: Success
@@ -119,7 +119,7 @@ DELETE     /resume/employment/:employmentId xyz.meggls.megglsxyz.resume.ResumeCo
 #     description: Values for new Employment
 #     type: object
 #     schema:
-#       $ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentExperience'
+#       $ref: '#/definitions/xyz.meggls.megglsxyz.employment.Employment'
 # responses:
 #  200:
 #    description: Success

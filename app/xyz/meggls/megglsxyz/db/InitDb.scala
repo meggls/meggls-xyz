@@ -24,22 +24,22 @@ class InitDb @Inject()(db: Database) {
             //DbCalls.createSchemas
 
             // setup tables
-            DbCalls.createEmploymentExperience
+            DbCalls.createEmployment
             DbCalls.createEmploymentPosition
             DbCalls.createEmploymentDuty
 
             // insert data
             EmploymentManager.InitData.data.map { empExp =>
-                val experienceInsert = EmploymentManager.DbCalls.insertEmploymentExperience(empExp)
+                val experienceInsert = EmploymentManager.DbCalls.insertEmployment(empExp)
                 experienceInsert.map { experienceId =>
-                    empExp.positions.map { empPos =>
+                    empExp.positions.map(_.map { empPos =>
                         val positionInsert = EmploymentManager.DbCalls.insertEmploymentPosition(experienceId, empPos)
                         positionInsert.map { positionId =>
-                            empPos.duties.map { empDuty =>
+                            empPos.duties.map(_.map { empDuty =>
                                 EmploymentManager.DbCalls.insertEmploymentDuty(positionId, empDuty)
-                            }
+                            })
                         }
-                    }
+                    })
                 }
             }
 
@@ -85,8 +85,8 @@ object InitDb extends LogUtil {
             result
         }
 
-        def createEmploymentExperience(implicit c: Connection): Boolean = {
-            log.trace("Starting createEmploymentExperience")
+        def createEmployment(implicit c: Connection): Boolean = {
+            log.trace("Starting createEmployment")
             val sql =
                 s"""
                   |CREATE TABLE $TABLE_EMPLOYMENT_EXPERIENCE (
@@ -94,12 +94,12 @@ object InitDb extends LogUtil {
                   |  company varchar(255) NOT NULL,
                   |  startDate int NOT NULL,
                   |  endDate int,
-                  |  CONSTRAINT PK_EmploymentExperience PRIMARY KEY (id)
+                  |  CONSTRAINT PK_Employment PRIMARY KEY (id)
                   |);
                 """.stripMargin
             dropIfExists(TABLE_EMPLOYMENT_EXPERIENCE)
             val result = SQL(sql).execute()
-            log.trace("Finished createEmploymentExperience")
+            log.trace("Finished createEmployment")
             result
         }
 

@@ -6,7 +6,7 @@ import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import xyz.meggls.megglsxyz.contactInfo.ContactInfoManager
 import xyz.meggls.megglsxyz.db.InitDb
 import xyz.meggls.megglsxyz.education.{Education, EducationManager, EducationProgram}
-import xyz.meggls.megglsxyz.employment.{EmploymentDuty, EmploymentExperience, EmploymentManager, EmploymentPosition}
+import xyz.meggls.megglsxyz.employment.{Employment, EmploymentDuty, EmploymentManager, EmploymentPosition}
 import xyz.meggls.megglsxyz.play.XyzController
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -48,28 +48,28 @@ class ResumeController @Inject()(
     }
 
     def getEmployment(employmentId: Long): Action[AnyContent] = Action.async { implicit request =>
-        employmentManager.getEmploymentExperience(employmentId).map {
+        employmentManager.getEmployment(employmentId).map {
             case Some(result) => Ok(Json.toJson(result))
             case None => NotFound
         }.transformWith(completeRequest(s"${getClass.getSimpleName}.getEmployment"))
     }
 
-    def updateEmployment(employmentId: Long): Action[EmploymentExperience] = Action(parse.json[EmploymentExperience]).async { implicit request =>
-        employmentManager.updateEmploymentExperience(employmentId, request.body).map {
+    def updateEmployment(employmentId: Long): Action[Employment] = Action(parse.json[Employment]).async { implicit request =>
+        employmentManager.updateEmployment(employmentId, request.body).map {
             case 0 => NotFound
             case _ => Ok
         }.transformWith(completeRequest(s"${getClass.getSimpleName}.updateEmployment"))
     }
 
     def deleteEmployment(employmentId: Long): Action[AnyContent] = Action.async { implicit request =>
-        employmentManager.deleteEmploymentExperience(employmentId).map {
+        employmentManager.deleteEmployment(employmentId).map {
             case 0 => NotFound
             case _ => Ok
         }.transformWith(completeRequest(s"${getClass.getSimpleName}.deleteEmployment"))
     }
 
-    def addEmployment: Action[EmploymentExperience] = Action.async(parse.json[EmploymentExperience]) { implicit request =>
-        employmentManager.addEmploymentExperience(request.body).map {
+    def addEmployment: Action[Employment] = Action.async(parse.json[Employment]) { implicit request =>
+        employmentManager.addEmployment(request.body).map {
             case Some(result) => Ok(Json.toJson(result))
             case None => NotFound
         }.transformWith(completeRequest(s"${getClass.getSimpleName}.addEmployment"))

@@ -7,7 +7,7 @@ object SchemaDefinition {
         EMPLOYMENT_SCHEMA
     )
 
-    val TABLE_EMPLOYMENT_EXPERIENCE = s"EmploymentExperience"
+    val TABLE_EMPLOYMENT_EXPERIENCE = s"Employment"
     val TABLE_EMPLOYMENT_POSITION = s"EmploymentPosition"
     val TABLE_EMPLOYMENT_DUTY = s"EmploymentDuty"
 
