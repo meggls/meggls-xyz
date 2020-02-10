@@ -46,11 +46,11 @@ GET     /resume                     xyz.meggls.megglsxyz.resume.ResumeController
 GET     /resume/employment          xyz.meggls.megglsxyz.resume.ResumeController.getAllEmployment
 
 ###
-# summary: View specific Employment details of an Emplopyment
+# summary: View specific Employment details
 # tags:
 #   - Resume
 # parameters:
-#   - name: experienceId
+#   - name: employmentId
 #     in: path
 #     description: ID of the Employment Experience
 #     type: integer
@@ -64,12 +64,63 @@ GET     /resume/employment          xyz.meggls.megglsxyz.resume.ResumeController
 GET     /resume/employment/:employmentId xyz.meggls.megglsxyz.resume.ResumeController.getEmployment(employmentId: Long)
 
 ###
+# summary: Update the details of an Employment
+# tags:
+#   - Resume
+# parameters:
+#   - in: path
+#     name: employmentId
+#     description: ID of the Employment Experience
+#     type: integer
+#   - in: body
+#     description: Updated values for Employment
+#     type: object
+#     schema:
+#       ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentExperience'
+# responses:
+#  200:
+#    description: Success
+###
+PUT     /resume/employment/:employmentId xyz.meggls.megglsxyz.resume.ResumeController.updateEmployment(employmentId: Long)
+
+###
+# summary: Delete an Employment, including all positions and duties associated
+# tags:
+#   - Resume
+# parameters:
+#   - in: path
+#     name: employmentId
+#     description: ID of the Employment Experience
+#     type: integer
+# responses:
+#  200:
+#    description: Success
+###
+DELETE     /resume/employment/:employmentId xyz.meggls.megglsxyz.resume.ResumeController.deleteEmployment(employmentId: Long)
+
+###
+# summary: Add a new Employment
+# tags:
+#   - Resume
+# parameters:
+#   - in: body
+#     description: Values for new Employment
+#     type: object
+#     schema:
+#       ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentExperience'
+# responses:
+#  200:
+#    description: Success
+###
+POST    /resume/employment/new      xyz.meggls.megglsxyz.resume.ResumeController.addEmployment
+
+###
 # summary: View all Positions of an Employment
 # tags:
 #   - Resume
 # parameters:
-#   - name: experienceId
-#     in: path
+#   - in: path
+#     name: employmentId
 #     description: ID of the Employment Experience
 #     type: integer
 # responses:
@@ -86,12 +137,12 @@ GET     /resume/employment/:employmentId/position   xyz.meggls.megglsxyz.resume.
 # tags:
 #   - Resume
 # parameters:
-#   - name: experienceId
-#     in: path
+#   - in: path
+#     name: employmentId
 #     description: ID of the Employment Experience
 #     type: integer
-#   - name: positionId
-#     in: path
+#   - in: path
+#     name: positionId
 #     description: ID of the Employment Position
 #     type: integer
 # responses:
@@ -104,16 +155,77 @@ GET     /resume/employment/:employmentId/position   xyz.meggls.megglsxyz.resume.
 GET     /resume/employment/:employmentId/position/:positionId   xyz.meggls.megglsxyz.resume.ResumeController.getEmploymentPosition(employmentId: Long, positionId: Long)
 
 ###
-# summary: View all Duties of a Position
+# summary: Update the details of a Position
 # tags:
 #   - Resume
 # parameters:
-#   - name: experienceId
+#   - in: path
+#     name: employmentId
+#     description: ID of the Employment Experience
+#     type: integer
+#   - in: path
+#     name: positionId
+#     description: ID of the Employment Position
+#     type: integer
+#   - in: body
+#     description: Updated values of the Position
+#     schema:
+#       ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentPosition'
+# responses:
+#  200:
+#    description: Success
+###
+PUT     /resume/employment/:employmentId/position/:positionId   xyz.meggls.megglsxyz.resume.ResumeController.updateEmploymentPosition(employmentId: Long, positionId: Long)
+
+###
+# summary: Delete a Position, including all duties associated
+# tags:
+#   - Resume
+# parameters:
+#   - name: employmentId
 #     in: path
 #     description: ID of the Employment Experience
 #     type: integer
 #   - name: positionId
 #     in: path
+#     description: ID of the Employment Position
+#     type: integer
+# responses:
+#  200:
+#    description: Success
+###
+DELETE     /resume/employment/:employmentId/position/:positionId   xyz.meggls.megglsxyz.resume.ResumeController.deleteEmploymentPosition(employmentId: Long, positionId: Long)
+
+###
+# summary: Add a new Position to an Employment
+# tags:
+#   - Resume
+# parameters:
+#   - in: path
+#     name: employmentId
+#     description: ID of the Employment Experience
+#     type: integer
+#   - in: body
+#     description: Values for new Position
+#     schema:
+#       ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentPosition'
+# responses:
+#  200:
+#    description: Success
+###
+POST /resume/employment/:employmentId/position/new          xyz.meggls.megglsxyz.resume.ResumeController.addEmploymentPosition(employmentId: Long)
+
+###
+# summary: View all Duties of a Position
+# tags:
+#   - Resume
+# parameters:
+#   - in: path
+#     name: employmentId
+#     description: ID of the Employment Experience
+#     type: integer
+#   - in: path
+#     name: positionId
 #     description: ID of the Employment Position
 #     type: integer
 # responses:
@@ -130,23 +242,93 @@ GET     /resume/employment/:employmentId/position/:positionId/duty   xyz.meggls.
 # tags:
 #   - Resume
 # parameters:
-#   - name: experienceId
-#     in: path
+#   - in: path
+#     name: employmentId
 #     description: ID of the Employment Experience
 #     type: integer
-#   - name: positionId
-#     in: path
+#   - in: path
+#     name: positionId
 #     description: ID of the Employment Position
 #     type: integer
-#   - name: dutyId
-#     in: path
+#   - in: path
+#     name: dutyId
 #     description: ID of the Employment Duty
 #     type: integer
 # responses:
 #  200:
 #    description: Success
-#    type: object
-#    schema:
-#      $ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentDuty'
 ###
 GET     /resume/employment/:employmentId/position/:positionId/duty/:dutyId   xyz.meggls.megglsxyz.resume.ResumeController.getEmploymentPositionDuty(employmentId: Long, positionId: Long, dutyId: Long)
+
+###
+# summary: Update the details of a Duty
+# tags:
+#   - Resume
+# parameters:
+#   - in: path
+#     name: employmentId
+#     description: ID of the Employment Experience
+#     type: integer
+#   - in: path
+#     name: positionId
+#     description: ID of the Employment Position
+#     type: integer
+#   - in: path
+#     name: dutyId
+#     description: ID of the Employment Duty
+#     type: integer
+#   - in: body
+#     description: Updated values of the Duty
+#     schema:
+#       ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentDuty'
+# responses:
+#  200:
+#    description: Success
+###
+PUT     /resume/employment/:employmentId/position/:positionId/duty/:dutyId   xyz.meggls.megglsxyz.resume.ResumeController.getEmploymentPositionDuty(employmentId: Long, positionId: Long, dutyId: Long)
+
+###
+# summary: Delete a Duty
+# tags:
+#   - Resume
+# parameters:
+#   - in: path
+#     name: employmentId
+#     description: ID of the Employment Experience
+#     type: integer
+#   - in: path
+#     name: positionId
+#     description: ID of the Employment Position
+#     type: integer
+#   - in: path
+#     name: dutyId
+#     description: ID of the Employment Duty
+#     type: integer
+# responses:
+#  200:
+#    description: Success
+###
+DELETE     /resume/employment/:employmentId/position/:positionId/duty/:dutyId   xyz.meggls.megglsxyz.resume.ResumeController.getEmploymentPositionDuty(employmentId: Long, positionId: Long, dutyId: Long)
+
+###
+# summary: Add a new Duty to a Position
+# tags:
+#   - Resume
+# parameters:
+#   - in: path
+#     name: employmentId
+#     description: ID of the Employment Experience
+#     type: integer
+#   - in: path
+#     name: positionId
+#     description: ID of the Employment Position
+#     type: integer
+#   - in: body
+#     description: Values for new Duty
+#     schema:
+#       ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentDuty'
+# responses:
+#  200:
+#    description: Success
+###
+POST /resume/employment/:employmentId/position/:positionId/duty/new      xyz.meggls.megglsxyz.resume.ResumeController.addEmploymentPositionDuty(employmentId: Long, positionId: Long)

@@ -88,6 +88,7 @@ class EmploymentManager @Inject()(db: Database) {
     }
 
     def addEmploymentExperience(empExp: EmploymentExperience): Future[Option[Long]] = {
+        //TODO: validate that position is within experience
         Future { db.withConnection { implicit c =>
             val experienceInsert = DbCalls.insertEmploymentExperience(empExp)
             experienceInsert.map { experienceId =>
@@ -105,6 +106,7 @@ class EmploymentManager @Inject()(db: Database) {
     }
 
     def addEmploymentPosition(experienceId: Long, empPos: EmploymentPosition): Future[Option[Long]] = {
+        //TODO: validate that position is within experience
         Future { db.withConnection { implicit c =>
             val positionInsert = DbCalls.insertEmploymentPosition(experienceId, empPos)
             positionInsert.map { positionId =>
@@ -116,7 +118,8 @@ class EmploymentManager @Inject()(db: Database) {
         }}(DbExecutionContext.ctx)
     }
 
-    def addEmploymentDuty(positionId: Long, empDuty: EmploymentDuty): Future[Option[Long]] = {
+    def addEmploymentDuty(employmentId: Long, positionId: Long, empDuty: EmploymentDuty): Future[Option[Long]] = {
+        //TODO: validate that position is within experience
         Future { db.withConnection { implicit c =>
             DbCalls.insertEmploymentDuty(positionId, empDuty)
         }}(DbExecutionContext.ctx)
@@ -128,13 +131,13 @@ class EmploymentManager @Inject()(db: Database) {
         }}(DbExecutionContext.ctx)
     }
 
-    def updateEmploymentPosition(positionId: Long, newPos: EmploymentPosition): Future[Int] = {
+    def updateEmploymentPosition(employmentId: Long, positionId: Long, newPos: EmploymentPosition): Future[Int] = {
         Future { db.withConnection { implicit c =>
             ???
         }}(DbExecutionContext.ctx)
     }
 
-    def updateEmploymentDuty(dutyId: Long, newDuty: EmploymentDuty): Future[Int] = {
+    def updateEmploymentDuty(employmentId: Long, positionId: Long, dutyId: Long, newDuty: EmploymentDuty): Future[Int] = {
         Future { db.withConnection { implicit c =>
             ???
         }}(DbExecutionContext.ctx)
@@ -146,13 +149,13 @@ class EmploymentManager @Inject()(db: Database) {
         }}(DbExecutionContext.ctx)
     }
 
-    def deleteEmploymentPosition(positionId: Long): Future[Int] = {
+    def deleteEmploymentPosition(experienceId: Long, positionId: Long): Future[Int] = {
         Future { db.withConnection { implicit c =>
             ???
         }}(DbExecutionContext.ctx)
     }
 
-    def deleteEmploymentDuty(dutyId: Long): Future[Int] = {
+    def deleteEmploymentDuty(employmentId: Long, positionId: Long, dutyId: Long): Future[Int] = {
         Future { db.withConnection { implicit c =>
             ???
         }}(DbExecutionContext.ctx)
