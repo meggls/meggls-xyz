@@ -42,10 +42,10 @@ object EducationManager {
                     EducationProgram(
                         programName = "Bachelor of Science",
                         focus = "Business Administration, emphasis in Marketing",
-                        secondary = List(
+                        secondary = Some(List(
                             "Minor in Economics",
                             "Certificate in Operations and Information Management"
-                        )
+                        ))
                     )
                 )
             ),
@@ -56,15 +56,15 @@ object EducationManager {
                     EducationProgram(
                         programName = "Master's Degree",
                         focus = "Information Technology, emphasis in Software Engineering",
-                        secondary = List(
+                        secondary = Some(List(
                             "Additional coursework in networking and security"
-                        )
+                        ))
                     ),
                     EducationProgram(
                         programName = "Graduate Certificate",
                         priority = 2,
                         focus = "Software Development",
-                        secondary = List.empty
+                        secondary = None
                     )
                 )
             )

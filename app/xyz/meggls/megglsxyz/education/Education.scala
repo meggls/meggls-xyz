@@ -18,7 +18,7 @@ case class EducationProgram(
                     programName: String,
                     priority: Int = 1,
                     focus: String,
-                    secondary: List[String]
+                    secondary: Option[List[String]]
                   )
 
 object EducationProgram {
