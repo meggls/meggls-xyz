@@ -33,6 +33,18 @@ POST    /resetResume                xyz.meggls.megglsxyz.resume.ResumeController
 GET     /resume                     xyz.meggls.megglsxyz.resume.ResumeController.getResume
 
 ###
+# summary: View contact information
+# tags:
+#   - resume
+# responses:
+#  200:
+#    description: Success
+#    schema:
+#      $ref: '#/definitions/xyz.meggls.megglsxyz.contactInfo.ContactInfo'
+###
+GET     /resume/contact             xyz.meggls.megglsxyz.resume.ResumeController.getContactInfo
+
+###
 # summary: View all Employments of Resume
 # tags:
 #   - "resume.employment"
