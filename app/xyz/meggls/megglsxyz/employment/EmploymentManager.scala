@@ -143,7 +143,7 @@ class EmploymentManager @Inject()(db: Database) {
         }}(DbExecutionContext.ctx)
     }
 
-    def deleteEmploymentExperience(experienceId: Long): Future[Done] = {
+    def deleteEmploymentExperience(experienceId: Long): Future[Int] = {
         Future { db.withConnection { implicit c =>
             ???
         }}(DbExecutionContext.ctx)

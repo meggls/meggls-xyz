@@ -45,7 +45,7 @@ GET     /resume                     xyz.meggls.megglsxyz.resume.ResumeController
 GET     /resume/contact             xyz.meggls.megglsxyz.resume.ResumeController.getContactInfo
 
 ###
-# summary: View all Employments of Resume
+# summary: View all Employments
 # tags:
 #   - "resume.employment"
 # responses:
@@ -346,3 +346,188 @@ DELETE     /resume/employment/:employmentId/position/:positionId/duty/:dutyId   
 #    description: Success
 ###
 POST /resume/employment/:employmentId/position/:positionId/duty/new      xyz.meggls.megglsxyz.resume.ResumeController.addEmploymentPositionDuty(employmentId: Long, positionId: Long)
+
+###
+# summary: View all Education
+# tags:
+#   - "resume.education"
+# responses:
+#  200:
+#    description: Success
+#    type: array
+#    items:
+#      $ref: '#/definitions/xyz.meggls.megglsxyz.education.Education'
+###
+GET /resume/education      xyz.meggls.megglsxyz.resume.ResumeController.getAllEducation
+
+###
+# summary: View specific Education details
+# tags:
+#   - "resume.education"
+# parameters:
+#   - in: path
+#     name: educationId
+#     description: ID of the Education Experience
+#     type: integer
+# responses:
+#  200:
+#    description: Success
+#    type: object
+#    schema:
+#      $ref: '#/definitions/xyz.meggls.megglsxyz.education.Education'
+###
+GET /resume/education/:educationId  xyz.meggls.megglsxyz.resume.ResumeController.getEducation(educationId: Long)
+
+###
+# summary: Update the details of an Education
+# tags:
+#   - "resume.education"
+# parameters:
+#   - in: path
+#     name: educationId
+#     description: ID of the Education Experience
+#     type: integer
+#   - in: body
+#     description: Updated values for the Education
+#     schema:
+#       $ref: '#/definitions/xyz.meggls.megglsxyz.education.Education'
+# responses:
+#  200:
+#    description: Success
+###
+PUT /resume/education/:educationId  xyz.meggls.megglsxyz.resume.ResumeController.updateEducation(educationId: Long)
+
+###
+# summary: Delete an Education, including all associated Education Programs
+# tags:
+#   - "resume.education"
+# parameters:
+#   - in: path
+#     name: educationId
+#     description: ID of the Education Experience
+#     type: integer
+# responses:
+#  200:
+#    description: Success
+###
+DELETE /resume/education/:educationId   xyz.meggls.megglsxyz.resume.ResumeController.deleteEducation(educationId: Long)
+
+###
+# summary: Add a new Education
+# tags:
+#   - "resume.education"
+# parameters:
+#   - in: path
+#     name: educationId
+#     description: ID of the Education Experience
+#     type: integer
+#   - in: body
+#     description: Values for the new Education
+#     schema:
+#       $ref: '#/definitions/xyz.meggls.megglsxyz.education.Education'
+# responses:
+#  200:
+#    description: Success
+###
+POST /resume/education/new  xyz.meggls.megglsxyz.resume.ResumeController.addEducation
+
+###
+# summary: View all Programs of an Education Experience
+# tags:
+#   - "resume.education"
+# parameters:
+#   - in: path
+#     name: educationId
+#     description: ID of the Education Experience
+#     type: integer
+# responses:
+#  200:
+#    description: Success
+#    type: array
+#    items:
+#      $ref: '#/definitions/xyz.meggls.megglsxyz.education.EducationProgram'
+###
+GET /resume/education/:educationId/program  xyz.meggls.megglsxyz.resume.ResumeController.getEducationPrograms(educationId: Long)
+
+###
+# summary: View specific Program details of an Education
+# tags:
+#   - "resume.education"
+# parameters:
+#   - in: path
+#     name: educationId
+#     description: ID of the Education Experience
+#     type: integer
+#   - in: path
+#     name: programId
+#     description: ID of the Education Program
+#     type: integer
+# responses:
+#  200:
+#    description: Success
+#    type: object
+#    schema:
+#      $ref: '#/definitions/xyz.meggls.megglsxyz.education.EducationProgram'
+###
+GET /resume/education/:educationId/program/:programId   xyz.meggls.megglsxyz.resume.ResumeController.getEducationProgram(educationId: Long, programId: Long)
+
+###
+# summary: Update the details of an Education Program
+# tags:
+#   - "resume.education"
+# parameters:
+#   - in: path
+#     name: educationId
+#     description: ID of the Education Experience
+#     type: integer
+#   - in: path
+#     name: programId
+#     description: ID of the Education Program
+#     type: integer
+#   - in: body
+#     description: Updated values for the Education Program
+#     schema:
+#       $ref: '#/definitions/xyz.meggls.megglsxyz.education.EducationProgram'
+# responses:
+#  200:
+#    description: Success
+###
+PUT /resume/education/:educationId/program/:programId   xyz.meggls.megglsxyz.resume.ResumeController.updateEducationProgram(educationId: Long, programId: Long)
+
+###
+# summary: Delete an Education Program
+# tags:
+#   - "resume.education"
+# parameters:
+#   - in: path
+#     name: educationId
+#     description: ID of the Education Experience
+#     type: integer
+#   - in: path
+#     name: programId
+#     description: ID of the Education Program
+#     type: integer
+# responses:
+#  200:
+#    description: Success
+###
+DELETE /resume/education/:educationId/program/:programId    xyz.meggls.megglsxyz.resume.ResumeController.deleteEducationProgram(educationId: Long, programId: Long)
+
+###
+# summary: Delete an Education Program
+# tags:
+#   - "resume.education"
+# parameters:
+#   - in: path
+#     name: educationId
+#     description: ID of the Education Experience
+#     type: integer
+#   - in: body
+#     description: Values for the new Education Program
+#     schema:
+#       $ref: '#/definitions/xyz.meggls.megglsxyz.education.EducationProgram'
+# responses:
+#  200:
+#    description: Success
+###
+POST /resume/education/:educationId/program/new  xyz.meggls.megglsxyz.resume.ResumeController.addEducationProgram(educationId: Long)

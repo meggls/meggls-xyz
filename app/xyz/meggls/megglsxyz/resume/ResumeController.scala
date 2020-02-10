@@ -5,7 +5,7 @@ import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import xyz.meggls.megglsxyz.contactInfo.ContactInfoManager
 import xyz.meggls.megglsxyz.db.InitDb
-import xyz.meggls.megglsxyz.education.EducationManager
+import xyz.meggls.megglsxyz.education.{Education, EducationManager, EducationProgram}
 import xyz.meggls.megglsxyz.employment.{EmploymentDuty, EmploymentExperience, EmploymentManager, EmploymentPosition}
 import xyz.meggls.megglsxyz.play.XyzController
 
@@ -63,7 +63,8 @@ class ResumeController @Inject()(
 
     def deleteEmployment(employmentId: Long): Action[AnyContent] = Action.async { implicit request =>
         employmentManager.deleteEmploymentExperience(employmentId).map {
-            _ => Ok
+            case 0 => NotFound
+            case _ => Ok
         }.transformWith(completeRequest(s"${getClass.getSimpleName}.deleteEmployment"))
     }
 
@@ -96,7 +97,8 @@ class ResumeController @Inject()(
 
     def deleteEmploymentPosition(employmentId: Long, positionId: Long): Action[AnyContent] = Action.async { implicit request =>
         employmentManager.deleteEmploymentPosition(employmentId, positionId).map {
-            _ => Ok
+            case 0 => NotFound
+            case _ => Ok
         }.transformWith(completeRequest(s"${getClass.getSimpleName}.deleteEmploymentPosition"))
     }
 
@@ -129,7 +131,8 @@ class ResumeController @Inject()(
 
     def deleteEmploymentPositionDuty(employmentId: Long, positionId: Long, dutyId: Long): Action[AnyContent] = Action.async { implicit request =>
         employmentManager.deleteEmploymentDuty(employmentId, positionId, dutyId).map {
-            _ => Ok
+            case 0 => NotFound
+            case _ => Ok
         }.transformWith(completeRequest(s"${getClass.getSimpleName}.deleteEmploymentPositionDuty"))
     }
 
@@ -138,6 +141,74 @@ class ResumeController @Inject()(
             case Some(result) => Ok(Json.toJson(result))
             case None => NotFound
         }.transformWith(completeRequest(s"${getClass.getSimpleName}.addEmploymentPositionDuty"))
+    }
+
+    def getAllEducation = Action.async { implicit request =>
+        educationManager.getAllEducation.map {
+            request => Ok(Json.toJson(request))
+        }.transformWith(completeRequest(s"${getClass.getSimpleName}.getAllEducation"))
+    }
+
+    def getEducation(educationId: Long) = Action.async { implicit request =>
+        educationManager.getEducation(educationId).map {
+            case Some(result) => Ok(Json.toJson(result))
+            case None => NotFound
+        }.transformWith(completeRequest(s"${getClass.getSimpleName}.getEducation"))
+    }
+
+    def updateEducation(educationId: Long) = Action.async(parse.json[Education]){ implicit request =>
+        educationManager.updateEducation(educationId, request.body).map {
+            case 0 => NotFound
+            case _ => Ok
+        }.transformWith(completeRequest(s"${getClass.getSimpleName}.updateEducation"))
+    }
+
+    def deleteEducation(educationId: Long) = Action.async{ implicit request =>
+        educationManager.deleteEducation(educationId).map {
+            case 0 => NotFound
+            case _ => Ok
+        }.transformWith(completeRequest(s"${getClass.getSimpleName}.updateEducation"))
+    }
+
+    def addEducation = Action.async(parse.json[Education]){implicit request =>
+        educationManager.addEducation(request.body).map {
+            case Some(result) => Ok(Json.toJson(result))
+            case None => NotFound
+        }.transformWith(completeRequest(s"${getClass.getSimpleName}.addEducation"))
+    }
+
+    def getEducationPrograms(educationId: Long) = Action.async{implicit request =>
+        educationManager.getEducationPrograms(educationId).map {
+            result => Ok(Json.toJson(result))
+        }.transformWith(completeRequest(s"${getClass.getSimpleName}.getEducationPrograms"))
+    }
+
+    def getEducationProgram(educationId: Long, programId: Long) = Action.async{implicit request =>
+        educationManager.getEducationProgram(educationId, programId).map {
+            case Some(result) => Ok(Json.toJson(result))
+            case None => NotFound
+        }.transformWith(completeRequest(s"${getClass.getSimpleName}.getEducationProgram"))
+    }
+
+    def updateEducationProgram(educationId: Long, programId: Long) = Action.async(parse.json[EducationProgram]){ implicit request =>
+        educationManager.updateEducationProgram(educationId, programId, request.body).map {
+            case 0 => NotFound
+            case _ => Ok
+        }.transformWith(completeRequest(s"${getClass.getSimpleName}.updateEducationProgram"))
+    }
+
+    def deleteEducationProgram(educationId: Long, programId: Long) = Action.async { implicit request =>
+        educationManager.deleteEducationProgram(educationId, programId).map {
+            case 0 => NotFound
+            case _ => Ok
+        }.transformWith(completeRequest(s"${getClass.getSimpleName}.deleteEducationProgram"))
+    }
+
+    def addEducationProgram(educationId: Long) = Action.async(parse.json[EducationProgram]){ implicit request =>
+        educationManager.addEducationProgram(educationId, request.body).map {
+            case Some(result) => Ok(Json.toJson(result))
+            case None => NotFound
+        }.transformWith(completeRequest(s"${getClass.getSimpleName}.addEducationProgram"))
     }
 
 }

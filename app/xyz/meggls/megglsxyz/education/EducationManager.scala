@@ -10,6 +10,24 @@ class EducationManager {
         Future.successful(InitData.data)
     }
 
+    def getEducation(educationId: Long): Future[Option[Education]] = ???
+
+    def updateEducation(educationId: Long, updatedEducation: Education): Future[Int] = ???
+
+    def deleteEducation(educationId: Long): Future[Int] = ???
+
+    def addEducation(newEducation: Education): Future[Option[Long]] = ???
+
+    def getEducationPrograms(educationId: Long): Future[List[EducationProgram]] = ???
+
+    def getEducationProgram(educationId: Long, programId: Long): Future[Option[EducationProgram]] = ???
+
+    def updateEducationProgram(educationId: Long, programId: Long, updatedProgram: EducationProgram): Future[Int] = ???
+
+    def deleteEducationProgram(educationId: Long, programId: Long): Future[Int] = ???
+
+    def addEducationProgram(educationId: Long, newProgram: EducationProgram): Future[Option[Long]] = ???
+
 }
 
 object EducationManager {
