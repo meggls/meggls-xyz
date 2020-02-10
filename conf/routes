@@ -13,7 +13,7 @@ GET     /                           controllers.Default.redirect(to = "/docs/swa
 ###
 # summary: Reset the Resume to Megan Juell's original values
 # tags:
-#   - Resume
+#   - resume
 # responses:
 #  200:
 #    description: Success
@@ -23,7 +23,7 @@ POST    /resetResume                xyz.meggls.megglsxyz.resume.ResumeController
 ###
 # summary: View entire Resume
 # tags:
-#   - Resume
+#   - resume
 # responses:
 #  200:
 #    description: Success
@@ -35,7 +35,7 @@ GET     /resume                     xyz.meggls.megglsxyz.resume.ResumeController
 ###
 # summary: View all Employments of Resume
 # tags:
-#   - Resume
+#   - "resume.employment"
 # responses:
 #  200:
 #    description: Success
@@ -48,7 +48,7 @@ GET     /resume/employment          xyz.meggls.megglsxyz.resume.ResumeController
 ###
 # summary: View specific Employment details
 # tags:
-#   - Resume
+#   - "resume.employment"
 # parameters:
 #   - name: employmentId
 #     in: path
@@ -66,17 +66,17 @@ GET     /resume/employment/:employmentId xyz.meggls.megglsxyz.resume.ResumeContr
 ###
 # summary: Update the details of an Employment
 # tags:
-#   - Resume
+#   - "resume.employment"
 # parameters:
 #   - in: path
 #     name: employmentId
 #     description: ID of the Employment Experience
 #     type: integer
 #   - in: body
+#     name: updatedEmployment
 #     description: Updated values for Employment
-#     type: object
 #     schema:
-#       ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentExperience'
+#       $ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentExperience'
 # responses:
 #  200:
 #    description: Success
@@ -86,7 +86,7 @@ PUT     /resume/employment/:employmentId xyz.meggls.megglsxyz.resume.ResumeContr
 ###
 # summary: Delete an Employment, including all positions and duties associated
 # tags:
-#   - Resume
+#   - "resume.employment"
 # parameters:
 #   - in: path
 #     name: employmentId
@@ -101,13 +101,13 @@ DELETE     /resume/employment/:employmentId xyz.meggls.megglsxyz.resume.ResumeCo
 ###
 # summary: Add a new Employment
 # tags:
-#   - Resume
+#   - "resume.employment"
 # parameters:
 #   - in: body
 #     description: Values for new Employment
 #     type: object
 #     schema:
-#       ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentExperience'
+#       $ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentExperience'
 # responses:
 #  200:
 #    description: Success
@@ -117,7 +117,7 @@ POST    /resume/employment/new      xyz.meggls.megglsxyz.resume.ResumeController
 ###
 # summary: View all Positions of an Employment
 # tags:
-#   - Resume
+#   - "resume.employment"
 # parameters:
 #   - in: path
 #     name: employmentId
@@ -135,7 +135,7 @@ GET     /resume/employment/:employmentId/position   xyz.meggls.megglsxyz.resume.
 ###
 # summary: View specific Position details of an Employment
 # tags:
-#   - Resume
+#   - "resume.employment"
 # parameters:
 #   - in: path
 #     name: employmentId
@@ -157,7 +157,7 @@ GET     /resume/employment/:employmentId/position/:positionId   xyz.meggls.meggl
 ###
 # summary: Update the details of a Position
 # tags:
-#   - Resume
+#   - "resume.employment"
 # parameters:
 #   - in: path
 #     name: employmentId
@@ -170,7 +170,7 @@ GET     /resume/employment/:employmentId/position/:positionId   xyz.meggls.meggl
 #   - in: body
 #     description: Updated values of the Position
 #     schema:
-#       ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentPosition'
+#       $ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentPosition'
 # responses:
 #  200:
 #    description: Success
@@ -180,7 +180,7 @@ PUT     /resume/employment/:employmentId/position/:positionId   xyz.meggls.meggl
 ###
 # summary: Delete a Position, including all duties associated
 # tags:
-#   - Resume
+#   - "resume.employment"
 # parameters:
 #   - name: employmentId
 #     in: path
@@ -199,7 +199,7 @@ DELETE     /resume/employment/:employmentId/position/:positionId   xyz.meggls.me
 ###
 # summary: Add a new Position to an Employment
 # tags:
-#   - Resume
+#   - "resume.employment"
 # parameters:
 #   - in: path
 #     name: employmentId
@@ -208,7 +208,7 @@ DELETE     /resume/employment/:employmentId/position/:positionId   xyz.meggls.me
 #   - in: body
 #     description: Values for new Position
 #     schema:
-#       ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentPosition'
+#       $ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentPosition'
 # responses:
 #  200:
 #    description: Success
@@ -218,7 +218,7 @@ POST /resume/employment/:employmentId/position/new          xyz.meggls.megglsxyz
 ###
 # summary: View all Duties of a Position
 # tags:
-#   - Resume
+#   - "resume.employment"
 # parameters:
 #   - in: path
 #     name: employmentId
@@ -240,7 +240,7 @@ GET     /resume/employment/:employmentId/position/:positionId/duty   xyz.meggls.
 ###
 # summary: View specific Duty details of a Position
 # tags:
-#   - Resume
+#   - "resume.employment"
 # parameters:
 #   - in: path
 #     name: employmentId
@@ -257,13 +257,15 @@ GET     /resume/employment/:employmentId/position/:positionId/duty   xyz.meggls.
 # responses:
 #  200:
 #    description: Success
+#    schema:
+#      $ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentDuty'
 ###
 GET     /resume/employment/:employmentId/position/:positionId/duty/:dutyId   xyz.meggls.megglsxyz.resume.ResumeController.getEmploymentPositionDuty(employmentId: Long, positionId: Long, dutyId: Long)
 
 ###
 # summary: Update the details of a Duty
 # tags:
-#   - Resume
+#   - "resume.employment"
 # parameters:
 #   - in: path
 #     name: employmentId
@@ -280,7 +282,7 @@ GET     /resume/employment/:employmentId/position/:positionId/duty/:dutyId   xyz
 #   - in: body
 #     description: Updated values of the Duty
 #     schema:
-#       ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentDuty'
+#       $ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentDuty'
 # responses:
 #  200:
 #    description: Success
@@ -290,7 +292,7 @@ PUT     /resume/employment/:employmentId/position/:positionId/duty/:dutyId   xyz
 ###
 # summary: Delete a Duty
 # tags:
-#   - Resume
+#   - "resume.employment"
 # parameters:
 #   - in: path
 #     name: employmentId
@@ -313,7 +315,7 @@ DELETE     /resume/employment/:employmentId/position/:positionId/duty/:dutyId   
 ###
 # summary: Add a new Duty to a Position
 # tags:
-#   - Resume
+#   - "resume.employment"
 # parameters:
 #   - in: path
 #     name: employmentId
@@ -326,7 +328,7 @@ DELETE     /resume/employment/:employmentId/position/:positionId/duty/:dutyId   
 #   - in: body
 #     description: Values for new Duty
 #     schema:
-#       ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentDuty'
+#       $ref: '#/definitions/xyz.meggls.megglsxyz.employment.EmploymentDuty'
 # responses:
 #  200:
 #    description: Success
